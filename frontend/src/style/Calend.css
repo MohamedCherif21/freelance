@@ -30,16 +30,27 @@ input {
 }
 
 .event-content {
-    display: flex;
-    flex-direction: column;
-    align-items: right;
-    padding: 5px;
+    max-height: 40px; /* Ajustez la hauteur maximale selon vos besoins */
+    overflow: hidden;
 }
+
+.multiple-events {
+    font-size: 8px; /* Ajustez la taille de la police selon vos besoins */
+}
+
 
 .event-title {
     font-weight: bold;
     font-size: 10px;
-    color: #eef2f5; /* Blue color */
+    color: #eef2f5; 
+    word-wrap: break-word;
+}
+
+
+.eventtitle {
+    font-weight: bold;
+    font-size: 10px;
+    color: #000000;
     word-wrap: break-word;
 }
 
@@ -47,3 +58,42 @@ input {
     font-size: 16px;
     color: #000000; /* Dark gray color */
 }
+
+.multiple-events::before {
+    content: attr(data-event-count);
+    background-color: #ff4500; /* Couleur d'arrière-plan pour indiquer plusieurs événements */
+    color: #fff; /* Couleur du texte */
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-right: 5px;
+}
+
+
+.rbc-time-gutter {
+    display: none;
+  }
+
+.rbc-time-content{
+    display: none;
+  }
+
+  .rbc-time-view {
+    .rbc-label {
+    display: none;
+    }
+    .rbc-allday-cell {
+    height: calc(100vh - 98px);
+    max-height: unset;
+    }
+    .rbc-time-content {
+    display: none;
+    }
+    }
+
+    .rbc-header {
+        background: #79b8e4;
+        color: white;
+        padding: 10px;
+        font-size: 12px;
+    }
+    

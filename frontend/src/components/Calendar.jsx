@@ -120,7 +120,7 @@ const Calend = () => {
                 events={events}
                 startAccessor="start"
                 endAccessor="end"
-                style={{ height: 700, margin: "50px" }}
+                style={{ height: 800, margin: "10px" }}
                 components={{ event: (eventProps) => <EventComponent {...eventProps} currentView={currentView} /> }}
                 onView={handleViewChange}
                 onNavigate={(newDate) => setCurrentDate(newDate)}
