@@ -87,7 +87,7 @@ router.post('/register', [
 });
 
 const createActivationToken = (payload) => {
-    return jwt.sign(payload, "mysecrettoken", { expiresIn: '5m' });
+    return jwt.sign(payload, "mysecrettoken", { expiresIn: '30m' });
 };
 
 router.post('/activationemail', async (req, res) => {
@@ -153,7 +153,7 @@ router.post('/login', [
                 }
             };
 
-            jwt.sign(payload, "mysecrettoken", { expiresIn: 360 }, (err, token) => {
+            jwt.sign(payload, "mysecrettoken", { expiresIn: 3600 }, (err, token) => {
                 if (err) {
                     console.log(err.message);
                     return res.status(500).json({ errors: [{ msg: "Server error" }] });
@@ -331,7 +331,7 @@ router.post('/forget-password', [
         }
         if (result.length > 0) {
             const secret = "mysecrettoken" + result[0].password;
-            const token = jwt.sign({ email: result[0].email, id: result[0].id }, secret, { expiresIn: "5m" });
+            const token = jwt.sign({ email: result[0].email, id: result[0].id }, secret, { expiresIn: "30m" });
             const link = `http://localhost:3000/resetPage/${result[0].id}/${token}`;
 
             let transporter = nodemailer.createTransport({

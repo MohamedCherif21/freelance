@@ -110,7 +110,7 @@ const Register = () => {
     //   </Form>
     <>
 
-      <section class="background-radial-gradient overflow-hidden">
+      <section className="background-radial-gradient overflow-hidden">
         <div className="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
           <div className="row gx-lg-5 align-items-center mb-5">
             <div className="col-lg-6 mb-5 mb-lg-0" style={{
@@ -168,8 +168,8 @@ const Register = () => {
                     </div>
 
 
-                    <div class="form-outline mb-4">
-                      <input type="email" id="form3Example3" class="form-control"
+                    <div className="form-outline mb-4">
+                      <input type="email" id="form3Example3" className="form-control"
                         placeholder='Enter your email'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)} />

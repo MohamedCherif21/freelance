@@ -25,6 +25,9 @@ input {
     margin-top: 5px;
 }
 
+.container{
+    border: 2px;
+}
 
 .event-content {
     display: flex;
@@ -35,7 +38,7 @@ input {
 
 .event-title {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 10px;
     color: #eef2f5; /* Blue color */
     word-wrap: break-word;
 }
