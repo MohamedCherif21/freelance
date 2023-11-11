@@ -50,7 +50,7 @@ input {
 .eventtitle {
     font-weight: bold;
     font-size: 10px;
-    color: #000000;
+    color: #025594; 
     word-wrap: break-word;
 }
 
@@ -98,8 +98,6 @@ input {
     }
     
 
-
-
     .calend-container {
         display: flex;
       }
@@ -117,3 +115,96 @@ input {
         flex: 2; /* Le calendrier prendra 2/3 de l'espace */
         padding: 10px;
       }
+
+      .event-details-container {
+        width: 100%;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      .event-details-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .event-details-title {
+        font-size: 20px;
+        font-weight: bold;
+      }
+      
+      .event-details-status {
+        font-size: 16px;
+        color: rgba(16, 54, 136, 0.596);
+      }
+      
+      .event-details-dates {
+        font-size: 16px;
+        color: rgba(16, 54, 136, 0.596);
+      }
+      
+      .event-details-body {
+        margin-top: 20px;
+      }
+      
+      .event-details-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        background-color: #e7eaea;
+      }
+      
+      .event-details-label {
+        font-size: 16px;
+        font-weight: bold;
+      }
+      
+      .event-details-value {
+        font-size: 16px;
+      }
+      
+      .event-details-bookingelements-container {
+        margin-top: 20px;
+      }
+      
+      .event-details-bookingelement {
+        margin-bottom: 10px;
+      }
+      
+      .event-details-bookingelement-name {
+        font-size: 16px;
+        font-weight: bold;
+      }
+      
+      .event-details-bookingelement-details {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .event-details-bookingelement-detail {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+      }
+      
+      .event-details-bookingelement-detail label {
+        font-size: 14px;
+        color: #000000;
+      }
+      
+      .event-details-bookingelement-detail span {
+        font-size: 14px;
+      }
+      
+
+      .event-details-bookingelement {
+        background-color: #f1f3f5;
+        padding: 10px;
+      }
+
+    

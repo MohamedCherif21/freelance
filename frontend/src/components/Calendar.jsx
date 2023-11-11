@@ -51,7 +51,7 @@ const EventComponent = ({ event, currentView }) => {
         default:
             content = (
                 <div className="event-content">
-                    <p className="event-title"><b>{event.title}</b></p>
+                    <p className="eventtitle"><b>{event.title}</b></p>
                 </div>
             );
     }
@@ -115,21 +115,38 @@ const Calend = () => {
     console.log(SelectedEvent);
     return (
         <div className="calend-container">
-
-            <div className="events-column" style={{ paddingTop: "66px",width:"300px"}}>
-                <div className="rbc-header" >
-                    <span role="clomnheader">Event</span>
-                </div>
-                {SelectedEvent && (
-                    <div className="form-row">
-                    <div className="form-column">
-                      <label style={{ textDecoration: 'underline' }}>{SelectedEvent.title}</label>
-                      <label style={{ backgroundColor: 'yourBackgroundColor' }}>Status: {SelectedEvent.status_code}</label>
-                      <label>{`${format(SelectedEvent.start, 'dd/MMM/yyyy')}-${format(SelectedEvent.end, 'dd/MMM/yyyy')}`}</label>
+            {currentView === "week" &&  (
+                <div className="events-column" style={{ paddingTop: "66px", width: "300px" }}>
+                    <div className="rbc-header" >
+                        <span role="clomnheader">Event</span>
                     </div>
-                  </div>
-                )}
-            </div>
+                    {SelectedEvent && (
+                        <div className="form-row">
+                            <div className="form-column">
+                                <label style={{ textDecoration: 'underline' }}>{SelectedEvent.title}</label>
+                                <label style={{ backgroundColor: 'yellow' }}>Status: {SelectedEvent.status_code}</label>
+                                <label>{`${format(SelectedEvent.start, 'dd/MMM/yyyy')}-${format(SelectedEvent.end, 'dd/MMM/yyyy')}`}</label>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
+            {currentView === "day" &&  (
+                <div className="events-column" style={{ paddingTop: "66px", width: "300px" }}>
+                    <div className="rbc-header" >
+                        <span role="clomnheader">Event</span>
+                    </div>
+                    {SelectedEvent && (
+                        <div className="form-row">
+                            <div className="form-column">
+                                <label style={{ textDecoration: 'underline' }}>{SelectedEvent.title}</label>
+                                <label style={{ backgroundColor: 'green' }}>Status: {SelectedEvent.status_code}</label>
+                                <label>{`${format(SelectedEvent.start, 'dd/MMM/yyyy')}-${format(SelectedEvent.end, 'dd/MMM/yyyy')}`}</label>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
             <div className="calendar-column">
                 <Calendar
                     localizer={localizer}
@@ -142,69 +159,81 @@ const Calend = () => {
                     onNavigate={(newDate) => setCurrentDate(newDate)}
                     onSelectEvent={(event) => setSelectedEvent(event)}
                     popup
-                    
+
                 />
                 {SelectedEvent && (
-                    <div className="form-container">
-                        <div className="form-row">
-                            <div className="form-column">
-                                <label>Booking:</label>
-                                <input type="text" value={SelectedEvent.number} readOnly />
+                    <div className="event-details-container">
+                        <div className="event-details-header">
+                            <h2 className="event-details-title">{SelectedEvent.title}</h2>
+                            <p className="event-details-status">Status: {SelectedEvent.status_code}</p>
+                            <p className="event-details-dates">{`${format(SelectedEvent.start, "dd/MMM/yyyy")}-${format(SelectedEvent.end, "dd/MMM/yyyy")}`}</p>
+                        </div>
+
+                        <div className="event-details-body">
+                            <div className="event-details-row">
+                                <div className="event-details-label">Booking:</div>
+                                <div className="event-details-value">{SelectedEvent.number}</div>
                             </div>
-                            <div className="form-column">
-                                <label>Trip Name:</label>
-                                <input type="text" value={SelectedEvent.title} readOnly />
+
+                            <div className="event-details-row">
+                                <div className="event-details-label">Trip Name:</div>
+                                <div className="event-details-value">{SelectedEvent.title}</div>
                             </div>
-                            <div className="form-column">
-                                <label>Status Code:</label>
-                                <input type="text" value={SelectedEvent.status_code} readOnly />
+
+                            <div className="event-details-row">
+                                <div className="event-details-label">Contact First Name:</div>
+                                <div className="event-details-value">{SelectedEvent.contact_first_name}</div>
+                            </div>
+
+                            <div className="event-details-row">
+                                <div className="event-details-label">Company Name:</div>
+                                <div className="event-details-value">{SelectedEvent.company_name}</div>
+                            </div>
+
+                            <div className="event-details-row">
+                                <div className="event-details-label">Deptor Place:</div>
+                                <div className="event-details-value">{SelectedEvent.deptor_place}</div>
                             </div>
                         </div>
 
-                        <div className="form-row">
-                            <div className="form-column">
-                                <label>Start Date:</label>
-                                <input type="text" value={SelectedEvent.start.toLocaleString()} readOnly />
-                            </div>
-                            <div className="form-column">
-                                <label>End Date:</label>
-                                <input type="text" value={SelectedEvent.end.toLocaleString()} readOnly />
-                            </div>
-                            <div className="form-column">
-                                <label>Contact First Name:</label>
-                                <input type="text" value={SelectedEvent.contact_first_name} readOnly />
-                            </div>
-                        </div>
+                        {SelectedEvent.bookingelements.length > 0 && (
+                            <div className="event-details-bookingelements-container">
+                                <h3>Booking Elements</h3>
+                                {SelectedEvent.bookingelements.map((element, index) => (
+                                    <div key={index} className="event-details-bookingelement">
+                                        <p className="event-details-bookingelement-name">{element.element_name}</p>
+                                        <div className="event-details-bookingelement-details">
+                                            <div className="event-details-bookingelement-detail">
+                                                <label>Start:</label>
+                                                <span>{element.start.toLocaleString()}</span>
+                                            </div>
 
-                        <div className="form-row">
-                            <div className="form-column">
-                                <label>Company Name:</label>
-                                <input type="text" value={SelectedEvent.company_name} readOnly />
-                            </div>
-                            <div className="form-column">
-                                <label>Deptor Place:</label>
-                                <input type="text" value={SelectedEvent.deptor_place} readOnly />
-                            </div>
-                        </div>
-                        <br />
+                                            <div className="event-details-bookingelement-detail">
+                                                <label>End:</label>
+                                                <span>{element.end.toLocaleString()}</span>
+                                            </div>
+                                        </div>
+                                        <div className="event-details-bookingelement-details">
+                                            <div className="event-details-bookingelement-detail">
+                                                <label>Starttime:</label>
+                                                <span>{element.starttime.toLocaleString()}</span>
+                                            </div>
 
-                        {SelectedEvent.bookingelements.map((element, index) => (
-                            <div key={index} className="form-column">
-                                <label> {element.element_name}{index + 1}:</label>
-                                <br />
-                                <label>Start:</label>
-                                <input type="text" value={element.start.toLocaleString()} readOnly />
-                                <label>End:</label>
-                                <input type="text" value={element.end.toLocaleString()} readOnly />
-                                <label>Starttime:</label>
-                                <input type="text" value={element.starttime.toLocaleString()} readOnly />
-                                <label>EndTime:</label>
-                                <input type="text" value={element.endtime.toLocaleString()} readOnly />
-                                <label>Supplier Place:</label>
-                                <input type="text" value={element.supplier_place || "None"} readOnly />
+                                            <div className="event-details-bookingelement-detail">
+                                                <label>EndTime:</label>
+                                                <span>{element.endtime.toLocaleString()}</span>
+                                            </div>
+                                        </div>
+                                        <div className="event-details-bookingelement-detail">
+                                            <label>Supplier Place:</label>
+                                            <span>{element.supplier_place || "None"}</span>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
+                        )}
                     </div>
+
                 )}
 
             </div>
