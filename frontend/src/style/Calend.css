@@ -97,3 +97,23 @@ input {
         font-size: 12px;
     }
     
+
+
+
+    .calend-container {
+        display: flex;
+      }
+      
+      .events-columnn {
+        flex: 1; /* La colonne des événements prendra 1/3 de l'espace */
+        padding: 10px;
+        border-right: 0px solid #ddd; /* Bordure à droite pour séparer les colonnes */
+        overflow-y: auto; /* Ajoutez une barre de défilement si nécessaire */
+        
+        }
+      
+      
+      .calendar-column {
+        flex: 2; /* Le calendrier prendra 2/3 de l'espace */
+        padding: 10px;
+      }
