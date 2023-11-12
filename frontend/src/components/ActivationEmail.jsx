@@ -9,7 +9,6 @@ const ActivationEmail = () => {
     const navigate = useNavigate();
 
     const [match, setMatch] = useState(false)
-    const [isLoading, setIsLoading] = useState(false);
 
 
     useEffect(() => {

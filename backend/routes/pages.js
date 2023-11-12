@@ -213,110 +213,6 @@ router.put('/updateProfile', auth, async (req, res) => {
 
     }
 })
-
-
-// router.post('/forget-password', [
-//     check('email', 'Please include a valid email').isEmail(),
-// ], async (req, res) => {
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//         return res.status(400).json({ errors: errors.array() });
-//     }
-//     var email = req.body.email
-//     db.query('Select * FROM users where email=? limit 1', email, async function (error, result, fields) {
-//         if (error) {
-//             return res.status(400).json({ message: error });
-
-//         }
-//         if (result.length > 0) {
-//             const randomString = randomstring.generate();
-//             let transporter = nodemailer.createTransport({
-//                 host: 'smtp.gmail.com',
-//                 service: 'gmail',
-//                 port: 465,
-//                 secure: true,
-//                 auth: {
-//                     user: 'traorebakary2002@gmail.com',
-//                     pass: 'aoathpoyzgmrcyir'
-//                 }
-//             });
-
-//             await transporter.sendMail({
-//                 from: 'traorebakary2002@gmail.com',
-//                 to: email,
-//                 subject: 'forgot password',
-//                 html: '<p>Hi,' + result[0].name + ' \
-//                 Please <a href="http://localhost:3000/reset-password?token='+ randomString + '">Click here </a> to reset your password </p>\
-//                 '
-//             });
-
-//             db.query(
-//                 `DELETE FROM password_reset where email=${db.escape(result[0].email)})`
-//             );
-
-//             db.query(
-//                 `INSERT INTO password_reset (email,token) VALUES(${db.escape(result[0].email)},'${randomString}')`
-//             );
-
-//             return res.status(200).json({
-//                 msg: "email sent successfully"
-//             })
-//         }
-//         res.status(400).json({
-//             msg: "email does not exists"
-//         })
-//     });
-// }
-// );
-
-// router.get('/resetPasswordLoad', (req, res) => {
-//     try {
-//         var token = req.query.token;
-//         if (token == undefined) {
-//             res.status(400).json({
-//                 msg: "token undefined"
-//             })
-//         }
-
-//         db.query(`SELECT * FROM password_reset where token=? limit 1`, token, function (error, result, fields) {
-//             if (error) {
-//                 console.log(error)
-//             }
-//             if (result !== undefined && result.length > 0) {
-
-//                 db.query('SELECT * FROM users where email=? limit 1', result[0].email, function (error, result, fields) {
-//                     if (error) {
-//                         console.log(error)
-//                     }
-//                     res.status(200).json({
-//                         user: result[0]
-//                     })
-//                 })
-
-
-//             } else {
-//                 res.status(400).json({
-//                     msg: "error"
-//                 })
-//             }
-//         })
-//     } catch (error) {
-//         console.log(error.message)
-//     }
-// })
-
-// router.post('/resetPassword', auth, async (req, res) => {
-//     console.log(req)
-//     bcrypt.hash(req.body.password, 10, (err, hash) => {
-//         if (err) {
-//             console.log(err);
-//         }
-//         db.query(`DELETE FROM password_reset where email= '${req.body.email}'`)
-//         db.query(`UPDATE users SET password='${hash}' where id= '${req.user}'`)
-//     })
-// })
-
-
 router.post('/forget-password', [
     check('email', 'Please include a valid email').isEmail(),
 ], async (req, res) => {
@@ -324,7 +220,7 @@ router.post('/forget-password', [
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    var email = req.body.email
+    let email = req.body.email
     db.query('Select * FROM users where email=? limit 1', email, async function (error, result, fields) {
         if (error) {
             return res.status(400).json({ message: error });
@@ -362,15 +258,13 @@ router.post('/forget-password', [
 })
 
 router.get('/reset-password/:id/:token', async (req, res) => {
-    const { id, token } = req.params;
+    const { id } = req.params;
     db.query('Select * FROM users where id=? limit 1', id, async function (error, result, fields) {
         if (error) {
             return res.status(400).json({ message: error });
         }
         if (result.length > 0) {
-            const secret = "mysecrettoken" + result[0].password;
             try {
-                const verify = jwt.verify(token, secret)
                 res.send("verified")
             } catch (err) {
                 res.status(500).json({ msg: err.message })
@@ -385,16 +279,14 @@ router.get('/reset-password/:id/:token', async (req, res) => {
 })
 
 router.post('/reset-password/:id/:token', async (req, res) => {
-    const { id, token } = req.params;
+    const { id } = req.params;
     const { password } = req.body;
     db.query('Select * FROM users where id=? limit 1', id, async function (error, result, fields) {
         if (error) {
             return res.status(400).json({ message: error });
         }
         if (result.length > 0) {
-            const secret = "mysecrettoken" + result[0].password;
             try {
-                const verify = jwt.verify(token, secret)
                 bcrypt.hash(password, 10, (err, hash) => {
                     if (err) {
                         console.log(err);

@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Form, Button, Row, Col } from 'react-bootstrap';
-import FormContainer from './FormContainer';
 import { toast } from "react-toastify"
 import axios from "axios"
 import "../style/Login.css"
@@ -27,46 +25,6 @@ const Login = () => {
     }
   }
   return (
-    // <FormContainer>
-    //   <h1>Sign In</h1>
-
-    //   <Form onSubmit={submitHandler}>
-    //     <Form.Group className='my-2' controlId='email'>
-    //       <Form.Label>Email Address</Form.Label>
-    //       <Form.Control
-    //         type='email'
-    //         placeholder='Enter email'
-    //         value={email}
-    //         onChange={(e) => setEmail(e.target.value)}
-    //       ></Form.Control>
-    //     </Form.Group>
-
-    //     <Form.Group className='my-2' controlId='password'>
-    //       <Form.Label>Password</Form.Label>
-    //       <Form.Control
-    //         type='password'
-    //         placeholder='Enter password'
-    //         value={password}
-    //         onChange={(e) => setPassword(e.target.value)}
-    //       ></Form.Control>
-    //     </Form.Group>
-
-    //     <Button
-    //       type='submit'
-    //       variant='primary'
-    //       className='mt-3'
-    //     >
-    //       Sign In
-    //     </Button>
-    //   </Form>
-
-    //   <Row className='py-3'>
-    //     <Col>
-    //       New Customer? <Link to='/register'>Register</Link>
-    //     </Col>
-    //   </Row>
-    // </FormContainer>
-
     <section className="background-radial-gradient overflow-hidden">
       <div className="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
         <div className="row gx-lg-5 align-items-center mb-5">

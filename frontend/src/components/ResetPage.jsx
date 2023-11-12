@@ -1,15 +1,12 @@
-import { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import { Form, Button, Row, Col } from 'react-bootstrap';
-import FormContainer from './FormContainer';
+import { useState, useMemo, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify"
 import axios from "axios"
 import "../style/Login.css"
 
 const ResetPage = () => {
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
+    const showPassword = useMemo(() => false, []);
     const [show, setShow] = useState(false)
 
     const { id, token } = useParams()

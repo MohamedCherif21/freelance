@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import { useLocation } from 'react-router'
 import axios from 'axios'
 import { toast } from "react-toastify"
 import "../style/Login.css"
 const ResetPassword = () => {
-  const [email, setEmail] = useState()
-  const location = useLocation();
+const [email, setEmail] = useState()
+
 
 
   const handleSubmit = async (e) => {

@@ -30,33 +30,31 @@ input {
 }
 
 .event-content {
-    max-height: 40px; /* Ajustez la hauteur maximale selon vos besoins */
+    
     overflow: hidden;
 }
 
-.multiple-events {
-    font-size: 8px; /* Ajustez la taille de la police selon vos besoins */
-}
 
 
 .event-title {
-    font-weight: bold;
-    font-size: 10px;
+    font-size: 14px;
     color: #eef2f5; 
     word-wrap: break-word;
+    font-weight: bold;
 }
 
 
 .eventtitle {
     font-weight: bold;
-    font-size: 10px;
+    font-size: 12px;
     color: #025594; 
     word-wrap: break-word;
+    
 }
 
 .event-place {
-    font-size: 16px;
-    color: #000000; /* Dark gray color */
+    font-size: 12px;
+    color: #f4f2f2; /* Dark gray color */  
 }
 
 .multiple-events::before {
@@ -154,7 +152,7 @@ input {
         justify-content: space-between;
         align-items: center;
         margin-bottom: 10px;
-        background-color: #e7eaea;
+        background-color: #e6e6e6;
       }
       
       .event-details-label {
@@ -203,8 +201,8 @@ input {
       
 
       .event-details-bookingelement {
-        background-color: #f1f3f5;
+        background-color: #e6e6e6;
         padding: 10px;
       }
 
-    
+   

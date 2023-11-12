@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import { Views } from "react-big-calendar";
 import format from "date-fns/format";
 import getDay from "date-fns/getDay";
 import parse from "date-fns/parse";
-import { addDays } from "date-fns";
 import '../style/Calend.css';
 import startOfWeek from "date-fns/startOfWeek";
-
+import Layout from "../components/Layout";
+import { Scrollbars } from 'react-custom-scrollbars';
 const locales = {
     "en-US": require("date-fns/locale/en-US"),
 };
@@ -28,7 +27,11 @@ const EventComponent = ({ event, currentView }) => {
         case "month":
             content = (
                 <div className="event-content">
-                    <p className="event-title"><b>{event.title}</b></p>
+                     <Scrollbars style={{ height: 40 }}>
+            
+            <p className="event-title"><b>{event.title}</b></p>
+           
+          </Scrollbars>
                 </div>
             );
             break;
@@ -43,7 +46,9 @@ const EventComponent = ({ event, currentView }) => {
         case "day":
             content = (
                 <div className="event-content">
-                    <p className="event-title"><b>{event.title}</b></p>
+                    <p className="event-title"><b>{event.title}</b></p>               
+                    <p className="timestyle">{`${format(event.start, 'HH:MM:SS')}-${format(event.end, 'HH:MM:SS')}`}</p>
+
 
                 </div>
             );
@@ -69,12 +74,6 @@ const Calend = () => {
     const handleViewChange = (newView) => {
         setCurrentView(newView);
     };
-    let endDate = addDays(currentDate, 6);
-    const formattedStartDate = format(currentDate, "yyyy-MM-dd'T'00:00:00");
-    const formattedEndDate = format(endDate, "yyyy-MM-dd'T'00:00:00");
-
-
-
     useEffect(() => {
         axios.get(`http://localhost:5000/getBookingsByDateRange`, {
             params: {
@@ -111,14 +110,13 @@ const Calend = () => {
                 console.error("Erreur lors de la récupération des réservations :", error);
             });
     }, [currentDate]);
-
-    console.log(SelectedEvent);
     return (
+        <Layout>
         <div className="calend-container">
             {currentView === "week" &&  (
                 <div className="events-column" style={{ paddingTop: "66px", width: "300px" }}>
                     <div className="rbc-header" >
-                        <span role="clomnheader">Event</span>
+                        <span>Event</span>
                     </div>
                     {SelectedEvent && (
                         <div className="form-row">
@@ -134,13 +132,13 @@ const Calend = () => {
             {currentView === "day" &&  (
                 <div className="events-column" style={{ paddingTop: "66px", width: "300px" }}>
                     <div className="rbc-header" >
-                        <span role="clomnheader">Event</span>
+                        <span>Event</span>
                     </div>
                     {SelectedEvent && (
                         <div className="form-row">
                             <div className="form-column">
                                 <label style={{ textDecoration: 'underline' }}>{SelectedEvent.title}</label>
-                                <label style={{ backgroundColor: 'green' }}>Status: {SelectedEvent.status_code}</label>
+                                <label style={{ backgroundColor: '#86e486' }}>Status: {SelectedEvent.status_code}</label>
                                 <label>{`${format(SelectedEvent.start, 'dd/MMM/yyyy')}-${format(SelectedEvent.end, 'dd/MMM/yyyy')}`}</label>
                             </div>
                         </div>
@@ -153,12 +151,13 @@ const Calend = () => {
                     events={events}
                     startAccessor="start"
                     endAccessor="end"
-                    style={{ height: 800, margin: "10px" }}
+                    style={{ height: 1000, margin: "10px" }}
                     components={{ event: (eventProps) => <EventComponent {...eventProps} currentView={currentView} /> }}
                     onView={handleViewChange}
                     onNavigate={(newDate) => setCurrentDate(newDate)}
                     onSelectEvent={(event) => setSelectedEvent(event)}
                     popup
+                    showAllEvents
 
                 />
                 {SelectedEvent && (
@@ -238,6 +237,7 @@ const Calend = () => {
 
             </div>
         </div>
+        </Layout>
     );
 };
 

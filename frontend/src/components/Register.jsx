@@ -1,10 +1,7 @@
-import React from 'react'
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import React, { useState, } from 'react'
+import { Link } from 'react-router-dom';
+import { Form, Button} from 'react-bootstrap';
 import { toast } from "react-toastify"
-import FormContainer from "./FormContainer"
-import axios from "axios"
 import "../style/Login.css"
 import ReCAPTCHA from "react-google-recaptcha";
 import PhoneInput from "react-phone-input-2"
@@ -18,13 +15,12 @@ const Register = () => {
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
   const [verified, setVerified] = useState(false);
-  const [valid, setValid] = useState(true)
+  const setValid = React.useMemo(() => true, [])
 
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post('http://localhost:5000/register', { email, password, name, address, phone });
       toast.success("Registration successful. Check your email for the activation link.");
     } catch (err) {
       toast.error(err?.response?.data?.errors[0]?.msg);
@@ -48,69 +44,8 @@ const Register = () => {
   }
 
 
-  return (
-    // <FormContainer >
-    //   <h1>Sign Up</h1>
-    //   <Form onSubmit={handleSubmit}>
-    //     <Form.Group className='my-1' controlId='name'>
-    //       <Form.Label>Name</Form.Label>
-    //       <Form.Control
-    //         type='text'
-    //         placeholder='Enter your Name'
-    //         value={name}
-    //         onChange={(e) => setName(e.target.value)}
-    //       ></Form.Control>
-    //     </Form.Group>
-    //     <Form.Group className='my-1' controlId='email'>
-    //       <Form.Label>Email</Form.Label>
-    //       <Form.Control
-    //         type='email'
-    //         placeholder='Enter your email'
-    //         value={email}
-    //         onChange={(e) => setEmail(e.target.value)}
-    //       ></Form.Control>
-    //     </Form.Group>
-    //     <Form.Group className='my-1' controlId='password'>
-    //       <Form.Label>Password</Form.Label>
-    //       <Form.Control
-    //         type='password'
-    //         placeholder='Enter password'
-    //         value={password}
-    //         onChange={(e) => setPassword(e.target.value)}
-    //       ></Form.Control>
-    //     </Form.Group>
-
-    //     <Form.Group className='my-1' controlId='address'>
-    //       <Form.Label>Address</Form.Label>
-    //       <Form.Control
-    //         type='text'
-    //         placeholder='Enter your address'
-    //         value={address}
-    //         onChange={(e) => setAddress(e.target.value)}
-    //       ></Form.Control>
-    //     </Form.Group>
-
-    //     <Form.Group className='my-1' controlId='phone'>
-    //       <Form.Label>Phone</Form.Label>
-    //       <Form.Control
-    //         type='text'
-    //         placeholder='Enter your phone'
-    //         value={phone}
-    //         onChange={(e) => setPhone(e.target.value)}
-    //       ></Form.Control>
-    //     </Form.Group>
-
-    //     <Button
-    //       type='submit'
-    //       variant='primary'
-    //       className='mt-3'
-    //     >
-    //       Sign UP
-    //     </Button>
-    //   </Form>
-    <>
-
-      <section className="background-radial-gradient overflow-hidden">
+  return ( 
+    <section className="background-radial-gradient overflow-hidden">
         <div className="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
           <div className="row gx-lg-5 align-items-center mb-5">
             <div className="col-lg-6 mb-5 mb-lg-0" style={{
@@ -207,8 +142,6 @@ const Register = () => {
           </div>
         </div>
       </section>
-
-    </>
   );
 
 }
