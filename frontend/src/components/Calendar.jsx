@@ -127,8 +127,8 @@ const Calend = () => {
                                 // Vérifier si l'événement se trouve dans la semaine actuellement affichée
                                 if (isWithinInterval(event.start, { start: weekStart, end: weekEnd })) {
                                     return (
-                                        <div key={event.id} className="evental">
-                                            <div className="azerty">
+                                        <div key={event.id} className="eventalista">
+                                            <div className="rbc-row-content-scroll-container">
                                                 <label style={{ textDecoration: 'underline' }}>{event.title}</label>
                                                 <label style={{ backgroundColor: 'yellow' }}>Status: {event.status_code}</label>
                                                 <label>{`${format(event.start, 'dd/MMM/yyyy')}-${format(event.end, 'dd/MMM/yyyy')}`}</label>
@@ -156,7 +156,7 @@ const Calend = () => {
                                 // Afficher les détails de l'événement si l'événement se produit ce jour-là
                                 if (isEventOnSelectedDay) {
                                     return (
-                                        <div key={event.id} className="evental">
+                                        <div key={event.id} className="eventalista">
                                             <div className="rbc-row-content-scroll-container">
                                                 <label style={{ textDecoration: 'underline' }}>{event.title}</label>
                                                 <label style={{ backgroundColor: '#86e486' }}>Status: {event.status_code}</label>

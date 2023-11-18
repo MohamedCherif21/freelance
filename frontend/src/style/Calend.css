@@ -76,6 +76,13 @@ min-height: 20px;
 border-top: 1px solid #ddd;
 }
 
+.eventalista{
+box-sizing: border-box;
+min-height: 20px;
+border-top: 1px solid #ddd;
+height: 77px;
+}
+
 .rbc-time-gutter {
   display: none;
 }
