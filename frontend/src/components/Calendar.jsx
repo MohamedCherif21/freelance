@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import format from "date-fns/format";
 import getDay from "date-fns/getDay";
 import parse from "date-fns/parse";
 import '../style/Calend.css';
-import startOfWeek from "date-fns/startOfWeek";
 import Layout from "../components/Layout";
 import { Scrollbars } from 'react-custom-scrollbars';
+import { startOfWeek, endOfWeek, isWithinInterval, format } from 'date-fns';
+
+
 const locales = {
     "en-US": require("date-fns/locale/en-US"),
 };
@@ -27,11 +28,11 @@ const EventComponent = ({ event, currentView }) => {
         case "month":
             content = (
                 <div className="event-content">
-                     <Scrollbars style={{ height: 40 }}>
-            
-            <p className="event-title"><b>{event.title}</b></p>
-           
-          </Scrollbars>
+                    <Scrollbars style={{ height: 40 }}>
+
+                        <p className="event-title"><b>{event.title}</b></p>
+
+                    </Scrollbars>
                 </div>
             );
             break;
@@ -46,10 +47,8 @@ const EventComponent = ({ event, currentView }) => {
         case "day":
             content = (
                 <div className="event-content">
-                    <p className="event-title"><b>{event.title}</b></p>               
+                    <p className="event-title"><b>{event.title}</b></p>
                     <p className="timestyle">{`${format(event.start, 'HH:MM:SS')}-${format(event.end, 'HH:MM:SS')}`}</p>
-
-
                 </div>
             );
             break;
@@ -112,131 +111,83 @@ const Calend = () => {
     }, [currentDate]);
     return (
         <Layout>
-        <div className="calend-container">
-            {currentView === "week" &&  (
-                <div className="events-column" style={{ paddingTop: "66px", width: "300px" }}>
-                    <div className="rbc-header" >
-                        <span>Event</span>
-                    </div>
-                    {SelectedEvent && (
-                        <div className="form-row">
-                            <div className="form-column">
-                                <label style={{ textDecoration: 'underline' }}>{SelectedEvent.title}</label>
-                                <label style={{ backgroundColor: 'yellow' }}>Status: {SelectedEvent.status_code}</label>
-                                <label>{`${format(SelectedEvent.start, 'dd/MMM/yyyy')}-${format(SelectedEvent.end, 'dd/MMM/yyyy')}`}</label>
+            <div className="calend-container">
+                <div className="rbc-row">
+                    {currentView === "week" && (
+                        <div className="calendar-events-weekly" style={{ paddingTop: "46px", width: "300px" }}>
+                            <div className="rbc-header">
+                                <span>Event</span>
                             </div>
+                            {/* Filtrer les événements par semaine */}
+                            {events.map((event) => {
+                                // Filtrer les événements pour chaque semaine affichée dans le calendrier
+                                const weekStart = startOfWeek(currentDate); // Obtenez le début de la semaine actuellement affichée
+                                const weekEnd = endOfWeek(currentDate); // Obtenez la fin de la semaine actuellement affichée
+
+                                // Vérifier si l'événement se trouve dans la semaine actuellement affichée
+                                if (isWithinInterval(event.start, { start: weekStart, end: weekEnd })) {
+                                    return (
+                                        <div key={event.id} className="rbc-row">
+                                            <div className="rbc-row-content-scroll-container">
+                                                <label style={{ textDecoration: 'underline' }}>{event.title}</label>
+                                                <label style={{ backgroundColor: 'yellow' }}>Status: {event.status_code}</label>
+                                                <label>{`${format(event.start, 'dd/MMM/yyyy')}-${format(event.end, 'dd/MMM/yyyy')}`}</label>
+                                            </div>
+                                        </div>
+                                    );
+                                }
+                                return null; // Ne rien afficher si l'événement n'est pas dans la semaine actuelle
+                            })}
                         </div>
                     )}
-                </div>
-            )}
-            {currentView === "day" &&  (
-                <div className="events-column" style={{ paddingTop: "66px", width: "300px" }}>
-                    <div className="rbc-header" >
-                        <span>Event</span>
-                    </div>
-                    {SelectedEvent && (
-                        <div className="form-row">
-                            <div className="form-column">
-                                <label style={{ textDecoration: 'underline' }}>{SelectedEvent.title}</label>
-                                <label style={{ backgroundColor: '#86e486' }}>Status: {SelectedEvent.status_code}</label>
-                                <label>{`${format(SelectedEvent.start, 'dd/MMM/yyyy')}-${format(SelectedEvent.end, 'dd/MMM/yyyy')}`}</label>
+                    {currentView === "day" && (
+                        <div className="calendar-events-daily" style={{ paddingTop: "46px", width: "300px" }}>
+                            <div className="rbc-header">
+                                <span>Event</span>
                             </div>
+                            {/* Filtrer les événements par jour */}
+                            {events.map((event) => {
+                                // Vérifier si l'événement se produit le jour actuellement affiché
+                                const isEventOnSelectedDay =
+                                    event.start.getDate() === currentDate.getDate() &&
+                                    event.start.getMonth() === currentDate.getMonth() &&
+                                    event.start.getFullYear() === currentDate.getFullYear();
+
+                                // Afficher les détails de l'événement si l'événement se produit ce jour-là
+                                if (isEventOnSelectedDay) {
+                                    return (
+                                        <div key={event.id} className="rbc-row">
+                                            <div className="rbc-row-content-scroll-container">
+                                                <label style={{ textDecoration: 'underline' }}>{event.title}</label>
+                                                <label style={{ backgroundColor: '#86e486' }}>Status: {event.status_code}</label>
+                                                <label>{`${format(event.start, 'dd/MMM/yyyy')}-${format(event.end, 'dd/MMM/yyyy')}`}</label>
+                                            </div>
+                                        </div>
+                                    );
+                                }
+                                return null; // Ne rien afficher si l'événement n'est pas pour ce jour
+                            })}
                         </div>
                     )}
+
                 </div>
-            )}
-            <div className="calendar-column">
-                <Calendar
-                    localizer={localizer}
-                    events={events}
-                    startAccessor="start"
-                    endAccessor="end"
-                    style={{ height: 1000, margin: "10px" }}
-                    components={{ event: (eventProps) => <EventComponent {...eventProps} currentView={currentView} /> }}
-                    onView={handleViewChange}
-                    onNavigate={(newDate) => setCurrentDate(newDate)}
-                    onSelectEvent={(event) => setSelectedEvent(event)}
-                    popup
-                    showAllEvents
+                <div className="calendar-column">
+                    <Calendar
+                        localizer={localizer}
+                        events={events}
+                        startAccessor="start"
+                        endAccessor="end"
+                        style={{ height: 1000 }}
+                        components={{ event: (eventProps) => <EventComponent {...eventProps} currentView={currentView} /> }}
+                        onView={handleViewChange}
+                        onNavigate={(newDate) => setCurrentDate(newDate)}
+                        onSelectEvent={(event) => setSelectedEvent(event)}
+                        popup
+                        showAllEvents
 
-                />
-                {SelectedEvent && (
-                    <div className="event-details-container">
-                        <div className="event-details-header">
-                            <h2 className="event-details-title">{SelectedEvent.title}</h2>
-                            <p className="event-details-status">Status: {SelectedEvent.status_code}</p>
-                            <p className="event-details-dates">{`${format(SelectedEvent.start, "dd/MMM/yyyy")}-${format(SelectedEvent.end, "dd/MMM/yyyy")}`}</p>
-                        </div>
-
-                        <div className="event-details-body">
-                            <div className="event-details-row">
-                                <div className="event-details-label">Booking:</div>
-                                <div className="event-details-value">{SelectedEvent.number}</div>
-                            </div>
-
-                            <div className="event-details-row">
-                                <div className="event-details-label">Trip Name:</div>
-                                <div className="event-details-value">{SelectedEvent.title}</div>
-                            </div>
-
-                            <div className="event-details-row">
-                                <div className="event-details-label">Contact First Name:</div>
-                                <div className="event-details-value">{SelectedEvent.contact_first_name}</div>
-                            </div>
-
-                            <div className="event-details-row">
-                                <div className="event-details-label">Company Name:</div>
-                                <div className="event-details-value">{SelectedEvent.company_name}</div>
-                            </div>
-
-                            <div className="event-details-row">
-                                <div className="event-details-label">Deptor Place:</div>
-                                <div className="event-details-value">{SelectedEvent.deptor_place}</div>
-                            </div>
-                        </div>
-
-                        {SelectedEvent.bookingelements.length > 0 && (
-                            <div className="event-details-bookingelements-container">
-                                <h3>Booking Elements</h3>
-                                {SelectedEvent.bookingelements.map((element, index) => (
-                                    <div key={index} className="event-details-bookingelement">
-                                        <p className="event-details-bookingelement-name">{element.element_name}</p>
-                                        <div className="event-details-bookingelement-details">
-                                            <div className="event-details-bookingelement-detail">
-                                                <label>Start:</label>
-                                                <span>{element.start.toLocaleString()}</span>
-                                            </div>
-
-                                            <div className="event-details-bookingelement-detail">
-                                                <label>End:</label>
-                                                <span>{element.end.toLocaleString()}</span>
-                                            </div>
-                                        </div>
-                                        <div className="event-details-bookingelement-details">
-                                            <div className="event-details-bookingelement-detail">
-                                                <label>Starttime:</label>
-                                                <span>{element.starttime.toLocaleString()}</span>
-                                            </div>
-
-                                            <div className="event-details-bookingelement-detail">
-                                                <label>EndTime:</label>
-                                                <span>{element.endtime.toLocaleString()}</span>
-                                            </div>
-                                        </div>
-                                        <div className="event-details-bookingelement-detail">
-                                            <label>Supplier Place:</label>
-                                            <span>{element.supplier_place || "None"}</span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-
-                )}
-
+                    />
+                </div>
             </div>
-        </div>
         </Layout>
     );
 };
