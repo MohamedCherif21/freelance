@@ -81,8 +81,10 @@ display: block;
 .rbc-row{
 box-sizing: border-box;
 min-height: 20px;
-border-top: 1px solid #ddd;
+
 }
+
+
 
 .eventalista{
 box-sizing: border-box;
@@ -219,5 +221,21 @@ height: 77px;
       background-color: #e6e6e6;
       padding: 10px;
     }
+    
 
+    .booking-element {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+  }
+
+  .element-tittle{
+    font-weight: bold;
+    font-size: 10px;
+    color: #ffffff; 
+  
+  }
  
+  
+    
+  
