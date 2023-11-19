@@ -56,6 +56,14 @@ display: block;
   
 }
 
+.eventtitla{
+  font-weight: bold;
+  font-size: 12px;
+  color: #000000; 
+  word-wrap: break-word;
+
+}
+
 .event-place {
   font-size: 12px;
   color: #f4f2f2; /* Dark gray color */  

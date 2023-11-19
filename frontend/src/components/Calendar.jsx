@@ -129,9 +129,9 @@ const Calend = () => {
                                     return (
                                         <div key={event.id} className="eventalista">
                                             <div className="rbc-row-content-scroll-container">
-                                                <label style={{ textDecoration: 'underline' }}>{event.title}</label>
-                                                <label style={{ backgroundColor: 'yellow' }}>Status: {event.status_code}</label>
-                                                <label>{`${format(event.start, 'dd/MMM/yyyy')}-${format(event.end, 'dd/MMM/yyyy')}`}</label>
+                                                <h6 className="eventtitla" style={{ textDecoration: 'underline' }}>{event.title}</h6 >
+                                                <h6  className="eventtitla"style={{ backgroundColor: 'yellow' }}>Status: {event.status_code}</h6 >
+                                                <h6  className="eventtitla">{`${format(event.start, 'dd/MMM/yyyy')}-${format(event.end, 'dd/MMM/yyyy')}`}</h6 >
                                             </div>
                                         </div>
                                     );
