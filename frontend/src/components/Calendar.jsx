@@ -7,6 +7,9 @@ import '../style/Calend.css';
 import Layout from "../components/Layout";
 import { Scrollbars } from 'react-custom-scrollbars';
 import { startOfWeek, endOfWeek, isWithinInterval, format } from 'date-fns';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import set from 'date-fns/set';
 
 const locales = {
     "en-US": require("date-fns/locale/en-US"),
@@ -15,10 +18,12 @@ const locales = {
 const localizer = dateFnsLocalizer({
     format,
     parse,
-    startOfWeek,
+    startOfWeek: (date) => startOfWeek(date, { weekStartsOn: 1 }), // Lundi (1) comme premier jour
     getDay,
     locales,
 });
+
+
 
 const EventComponent = ({ event, currentView }) => {
     let content = null;
@@ -82,6 +87,20 @@ const Calend = () => {
     const handleViewChange = (newView) => {
         setCurrentView(newView);
     };
+
+
+    const [showModal, setShowModal] = useState(false);
+    const handleSelectEvent = (event) => {
+        setSelectedEvent(event);
+        setShowModal(true);
+    };
+
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+    const role = localStorage.getItem('role')
+
     useEffect(() => {
         axios.get(`http://localhost:5000/booking/getBookingsByDateRange`, {
             params: {
@@ -130,150 +149,119 @@ const Calend = () => {
         })
     }, [])
 
+    const customDayFormat = (date, culture, localizer) => {
+        const formattedDate = localizer.format(date, 'dd/MM/yyyy', culture);
+        const dayOfWeek = localizer.format(date, 'EEEE', culture);
+            return `${dayOfWeek} ${formattedDate}`;
+    };
+    
+
+
     return (
-        <Layout>
-            <div className="calend-container">
-                <div className="rbc-row">
-                    {currentView === "week" && (
-                        <div className="calendar-events-weekly" style={{ paddingTop: "46px", width: "300px" }}>
-                            <div className="rbc-header">
-                                <span>Event</span>
-                            </div>
-                            {events.map((event) => {
-                                const weekStart = startOfWeek(currentDate);
-                                const weekEnd = endOfWeek(currentDate);
-                                if (isWithinInterval(event.start, { start: weekStart, end: weekEnd })) {
-                                    return (
-                                        <div key={event.id} className="eventalista">
-                                            <div className="rbc-row-content-scroll-container">
-                                                <h6 className="eventtitla" style={{ textDecoration: 'underline' }}>{event.title}</h6 >
-                                                <h6 className="eventtitla" style={{ backgroundColor: 'yellow' }}>Status: {event.status_code}</h6 >
-                                                <h6 className="eventtitla">{`${format(event.start, 'dd/MMM/yyyy')}-${format(event.end, 'dd/MMM/yyyy')}`}</h6 >
+        <>
+            <Layout>
+                <div className="calend-container">
+                    <div className="rbc-row">
+                        {currentView === "week" && (
+                            <div className="calendar-events-weekly" style={{ paddingTop: "46px", width: "300px" }}>
+                                <div className="rbc-header">
+                                    <span>Event</span>
+                                </div>
+                                {events.map((event) => {
+                                    const weekStart = startOfWeek(currentDate);
+                                    const weekEnd = endOfWeek(currentDate);
+                                    if (isWithinInterval(event.start, { start: weekStart, end: weekEnd })) {
+                                        return (
+                                            <div key={event.id} className="eventalista">
+                                                <div className="rbc-row-content-scroll-container">
+                                                    <h6 className="eventtitla" style={{ textDecoration: 'underline' }}>{event.title}</h6 >
+                                                    <h6 className="eventtitla" style={{ backgroundColor: 'yellow' }}>Status: {event.status_code}</h6 >
+                                                    <h6 className="eventtitla">{`${format(event.start, 'dd/MMM/yyyy')}-${format(event.end, 'dd/MMM/yyyy')}`}</h6 >
+                                                </div>
                                             </div>
-                                        </div>
-                                    );
-                                }
-                                return null;
-                            })}
-                        </div>
-                    )}
-                    {currentView === "day" && (
-                        <div className="calendar-events-weekly" style={{ paddingTop: "46px", width: "300px" }}>
-                            <div className="rbc-header">
-                                <span>Event</span>
+                                        );
+                                    }
+                                    return null;
+                                })}
                             </div>
-                            {events.map((event) => {
-                                const weekStart = startOfWeek(currentDate);
-                                const weekEnd = endOfWeek(currentDate);
-                                if (isWithinInterval(event.start, { start: weekStart, end: weekEnd })) {
-                                    return (
-                                        <div key={event.id} className="eventalista">
-                                            <div className="rbc-row-content-scroll-container">
-                                                <h6 className="eventtitla" style={{ textDecoration: 'underline' }}>{event.title}</h6 >
-                                                <h6 className="eventtitla" style={{ backgroundColor: 'yellow' }}>Status: {event.status_code}</h6 >
-                                                <h6 className="eventtitla">{`${format(event.start, 'dd/MMM/yyyy')}-${format(event.end, 'dd/MMM/yyyy')}`}</h6 >
+                        )}
+                        {currentView === "day" && (
+                            <div className="calendar-events-weekly" style={{ paddingTop: "46px", width: "300px" }}>
+                                <div className="rbc-header">
+                                    <span>Event</span>
+                                </div>
+                                {events.map((event) => {
+                                    const weekStart = startOfWeek(currentDate);
+                                    const weekEnd = endOfWeek(currentDate);
+                                    if (isWithinInterval(event.start, { start: weekStart, end: weekEnd })) {
+                                        return (
+                                            <div key={event.id} className="eventalista">
+                                                <div className="rbc-row-content-scroll-container">
+                                                    <h6 className="eventtitla" style={{ textDecoration: 'underline' }}>{event.title}</h6 >
+                                                    <h6 className="eventtitla" style={{ backgroundColor: 'yellow' }}>Status: {event.status_code}</h6 >
+                                                    <h6 className="eventtitla">{`${format(event.start, 'dd/MMM/yyyy')}-${format(event.end, 'dd/MMM/yyyy')}`}</h6 >
+                                                </div>
                                             </div>
-                                        </div>
-                                    );
-                                }
-                                return null;
-                            })}
-                        </div>
-                    )}
+                                        );
+                                    }
+                                    return null;
+                                })}
+                            </div>
+                        )}
 
-                </div>
-                <div className="calendar-column">
-                    <Calendar
-                        localizer={localizer}
-                        events={events.map((booking) => ({
-                            ...booking,
+                    </div>
+                    <div className="calendar-column">
+                        <Calendar
+                              formats={{
+                                dayFormat: (date, culture, localizer) =>
+                                    customDayFormat(date, culture, localizer),
+                            }}
+                            localizer={localizer}
+                            events={events.map((booking) => ({
+                                ...booking,
 
-                            booking_elements: booking.bookingelements.map((element) => ({
-                                element_name: element.element_name,
-                                start: new Date(element.startdate),
-                                end: new Date(element.enddate),
-                                starttime: element.starttime,
-                                endtime: element.endtime,
-                                supplier_place: element.supplier_place,
+                                booking_elements: booking.bookingelements.map((element) => ({
+                                    element_name: element.element_name,
+                                    start: new Date(element.startdate),
+                                    end: new Date(element.enddate),
+                                    starttime: element.starttime,
+                                    endtime: element.endtime,
+                                    supplier_place: element.supplier_place,
 
-                            })),
-                        }))}
-                        startAccessor="start"
-                        endAccessor="end"
-                        style={{ height: 1000 }}
-                        components={{ event: (eventProps) => <EventComponent {...eventProps} currentView={currentView} /> }}
-                        onView={handleViewChange}
-                        onNavigate={(newDate) => setCurrentDate(newDate)}
-                        onSelectEvent={(event) => setSelectedEvent(event)}
-                        showAllEvents
-                        onDoubleClickEvent={onDoubleClickEvent}
-                    />
-                    {/* <div className="date-row" >
+                                })),
+                            }))}
+                            startAccessor="start"
+                            endAccessor="end"
+                            style={{ height: 1000 }}
+                            components={{ event: (eventProps) => <EventComponent {...eventProps} currentView={currentView} /> }}
+                            onView={handleViewChange}
+                            onNavigate={(newDate) => setCurrentDate(newDate)}
+                            onSelectEvent={(event) => handleSelectEvent(event)}
+                            showAllEvents
+                            onDoubleClickEvent={onDoubleClickEvent}
 
-                        <div className="rbc-header" >
-                            <span>11/20/2023</span>
-                        </div>
-                        <div className="rbc-header" >
-                            <span>11/20/2023</span>
-                        </div>
-                        <div className="rbc-header" >
-                            <span>11/20/2023</span>
-                        </div>
-                        <div className="rbc-header" >
-                            <span>11/20/2023</span>
-                        </div>
-                        <div className="rbc-header" >
-                            <span>11/20/2023</span>
-                        </div>
-                        <div className="rbc-header" >
-                            <span>11/20/2023</span>
-                        </div>
-                        <div className="rbc-header" >
-                            <span>11/20/2023</span>
-                        </div>
-                    </div> */}
+                        />
 
-                </div>
-
-            </div>
-            {SelectedEvent && (
-                <div className="event-details-container">
-                    <div className="event-details-header">
-                        <h2 className="event-details-title">{SelectedEvent.title}</h2>
-                        <p className="event-details-status">Status: {SelectedEvent.status_code}</p>
-                        <p className="event-details-dates">{`${format(SelectedEvent.start, "dd/MMM/yyyy")}-${format(SelectedEvent.end, "dd/MMM/yyyy")}`}</p>
                     </div>
 
-                    <div className="event-details-body">
-                        <div className="event-details-row">
-                            <div className="event-details-label">Booking:</div>
-                            <div className="event-details-value">{SelectedEvent.number}</div>
-                        </div>
+                </div>
+            </Layout>
 
-                        <div className="event-details-row">
-                            <div className="event-details-label">Trip Name:</div>
-                            <div className="event-details-value">{SelectedEvent.title}</div>
-                        </div>
-
-                        <div className="event-details-row">
-                            <div className="event-details-label">Contact First Name:</div>
-                            <div className="event-details-value">{SelectedEvent.contact_first_name}</div>
-                        </div>
-
-                        <div className="event-details-row">
-                            <div className="event-details-label">Company Name:</div>
-                            <div className="event-details-value">{SelectedEvent.company_name}</div>
-                        </div>
-
-                        <div className="event-details-row">
-                            <div className="event-details-label">Deptor Place:</div>
-                            <div className="event-details-value">{SelectedEvent.deptor_place}</div>
-                        </div>
-                    </div>
-
-                    {SelectedEvent.bookingelements.length > 0 && (
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{SelectedEvent.title}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {/* <p className="event-details-dates">{`${format(SelectedEvent.start, "dd/MMM/yyyy")}-${format(SelectedEvent.end, "dd/MMM/yyyy")}`}</p> */}
+                    <div className="event-details-label">Booking:</div>
+                    <div className="event-details-value">{SelectedEvent.number}</div>
+                    <div className="event-details-label">Company Name:</div>
+                    <div className="event-details-value">{SelectedEvent.company_name}</div>
+                    <div className="event-details-label">Deptor Place:</div>
+                    <div className="event-details-value">{SelectedEvent.deptor_place}</div>
+                    {SelectedEvent.bookingelements?.length > 0 && (
                         <div className="event-details-bookingelements-container">
-                            <h3>Booking Elements</h3>
+                            <h3>Activities Details</h3>
                             {SelectedEvent.bookingelements.map((element, index) => (
                                 <div key={index} className="event-details-bookingelement">
                                     <p className="event-details-bookingelement-name">{element.element_name}</p>
@@ -307,12 +295,14 @@ const Calend = () => {
                             ))}
                         </div>
                     )}
-                </div>
-
-            )}
-
-
-        </Layout>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
     );
 };
 

@@ -117,8 +117,10 @@ height: 77px;
   .rbc-header {
       background: #79b8e4;
       color: white;
-      padding: 10px;
-      font-size: 12px;
+      padding: 14px;
+      font-size: 14px;
+      white-space: pre-line;
+      height: 60px;
   }
   
 
@@ -129,6 +131,10 @@ height: 77px;
     .calendar-column {
       flex: 2; /* Le calendrier prendra 2/3 de l'espace */
    
+    }
+
+    *, ::after, ::before {
+      box-sizing: inherit;
     }
 
     .event-details-container {
@@ -235,6 +241,8 @@ height: 77px;
     color: #ffffff; 
   
   }
+
+ 
  
   
     

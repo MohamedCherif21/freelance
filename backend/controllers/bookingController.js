@@ -10,37 +10,53 @@ const numbers = (jsonData.response.changes)
 
 const getBookingsByDateRange = (req, res) => {
     const { startDate, endDate } = req.query;
-   
-
+  
     const sql = `
-        SELECT bh.*, be.*
-        FROM bookingheader bh
-        LEFT JOIN bookingelement be ON bh.id = be.booking_id
-        WHERE bh.startdate >= ? AND bh.enddate <= ?
+      SELECT bh.*, be.*
+      FROM bookingheader bh
+      LEFT JOIN bookingelement be ON bh.id = be.booking_id
+      WHERE bh.startdate >= ? AND bh.enddate <= ?
     `;
-
+  
     db.query(sql, [startDate, endDate], (error, results) => {
-        if (error) {
-            return res.status(500).json({ error: error.message });
-        }
-
-        const bookings = results.reduce((acc, current) => {
-            const bookingId = current.booking_id;
-            const booking = acc[bookingId] || {
-                ...current,
-                booking_elements: []
-            };
-
-            booking.booking_elements.push(current);
-
-            acc[bookingId] = booking;
-            return acc;
-        }, {});
-
-        res.json(Object.values(bookings));
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      }
+  
+      const bookingsByDay = {};
+      for (const result of results) {
+        const bookingId = result.booking_id;
+        const booking = bookingsByDay[bookingId] || {
+          id: result.booking_id,
+          trip_name: result.trip_name,
+          startdate: result.startdate,
+          enddate: result.enddate,
+          deptor_place: result.deptor_place,
+          summary: result.summary,
+          status_code: result.status_code,
+          number: result.number,
+          company_name: result.company_name,
+          contact_first_name: result.contact_first_name,
+          booking_elements: [],
+        };
+  
+        booking.booking_elements.push({
+          element_name: result.element_name,
+          startdate: result.startdate,
+          enddate: result.enddate,
+          starttime: result.starttime,
+          endtime: result.endtime,
+          supplier_place: result.supplier_place,
+        });
+  
+        bookingsByDay[bookingId] = booking;
+      }
+  
+      const bookings = Object.values(bookingsByDay);
+      res.json(bookings);
     });
-};
-
+  };
+  
 const getAllBookings = (req, res) => {
     const sql = `SELECT * FROM bookingheader`;
 
