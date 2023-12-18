@@ -128,14 +128,10 @@ height: 77px;
       display: flex;
     }
     
-    .calendar-column {
-      flex: 2; /* Le calendrier prendra 2/3 de l'espace */
-   
-    }
-
-    *, ::after, ::before {
+  
+ /* ::after, ::before {
       box-sizing: inherit;
-    }
+    }  */
 
     .event-details-container {
       width: 100%;
@@ -143,7 +139,7 @@ height: 77px;
       border: 1px solid #ccc;
       padding: 20px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+    } */
     
     .event-details-header {
       display: flex;
@@ -161,15 +157,15 @@ height: 77px;
       color: rgba(16, 54, 136, 0.596);
     }
     
-    .event-details-dates {
+    /* .event-details-dates {
       font-size: 16px;
       color: rgba(16, 54, 136, 0.596);
-    }
+    } */
     
-    .event-details-body {
+    /* .event-details-body {
       margin-top: 20px;
-    }
-    
+    } */
+/*     
     .event-details-row {
       display: flex;
       justify-content: space-between;
@@ -177,63 +173,63 @@ height: 77px;
       margin-bottom: 10px;
       background-color: #e6e6e6;
     }
-    
-    .event-details-label {
+     */
+    /* .event-details-label {
       font-size: 16px;
       font-weight: bold;
-    }
-    
+    } */
+/*     
     .event-details-value {
       font-size: 16px;
-    }
+    } */
     
-    .event-details-bookingelements-container {
+    /* .event-details-bookingelements-container {
       margin-top: 20px;
-    }
+    } */
     
-    .event-details-bookingelement {
+    /* .event-details-bookingelement {
       margin-bottom: 10px;
-    }
+    } */
     
-    .event-details-bookingelement-name {
+    /* .event-details-bookingelement-name {
       font-size: 16px;
       font-weight: bold;
     }
-    
-    .event-details-bookingelement-details {
+     */
+    /* .event-details-bookingelement-details {
       margin-top: 10px;
       display: flex;
       flex-direction: column;
-    }
+    } */
     
-    .event-details-bookingelement-detail {
+    /* .event-details-bookingelement-detail {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 5px;
-    }
+    } */
     
-    .event-details-bookingelement-detail label {
+    /* .event-details-bookingelement-detail label {
       font-size: 14px;
       color: #000000;
     }
-    
-    .event-details-bookingelement-detail span {
+     */
+    /* .event-details-bookingelement-detail span {
       font-size: 14px;
     }
-    
+     */
 
-    .event-details-bookingelement {
+    /* .event-details-bookingelement {
       background-color: #e6e6e6;
       padding: 10px;
-    }
+    } */
     
 
-    .booking-element {
+    /* .booking-element {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-  }
+  } */
 
   .element-tittle{
     font-weight: bold;
